@@ -12,10 +12,15 @@
             setInterval(mainLoop, 1000 / 60);//main loop
         }
 
+        var playerXpos = 0;
+        var playerYpos = 0;
+        var playerXspeed = 8;
+        var playerYspeed = 3;
+        var playerSize = 20;
 
         function mainLoop() {//mainloop
                 colorRect(0, 0, canvas.width, canvas.height, 'black'); //bg
-            colorRect(20,20,20,20,'red'); // player
+            colorRect(playerXpos,playerYpos,playerSize,playerSize,'red'); // player
         }
 
         function colorRect(x, y, w, h, c) {
