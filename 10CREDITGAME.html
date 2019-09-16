@@ -1,15 +1,18 @@
 <!doctype html>
 
 <body>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
     <script>
         var canvas, canvasContext;
 
         window.onload = function() {
-            canvas = document.getElementById('gameCanvas');//black canvas
+            canvas = document.getElementById('gameCanvas'); //black canvas
             canvasContext = canvas.getContext('2d');
+            
+            document.addEventListener('keydown', keyPressed);
+            document.addEventListener('keyup', keyReleased);
 
-            setInterval(mainLoop, 1000 / 60);//main loop
+            setInterval(mainLoop, 1000 / 60); //main loop
         }
 
         var playerXpos = 0;
@@ -18,9 +21,18 @@
         var playerYspeed = 3;
         var playerSize = 20;
 
-        function mainLoop() {//mainloop
-                colorRect(0, 0, canvas.width, canvas.height, 'black'); //bg
-            colorRect(playerXpos,playerYpos,playerSize,playerSize,'red'); // player
+        var startingPos = true;
+
+        function mainLoop() { //mainloop
+            colorRect(0, 0, canvas.width, canvas.height, 'black'); //bg
+            colorRect(playerXpos, playerYpos, playerSize, playerSize, 'red'); // player
+
+            if (startingPos) {
+                startPos();
+                startingPos = false;
+            }
+            
+            playerMove();
         }
 
         function colorRect(x, y, w, h, c) {
@@ -29,6 +41,38 @@
 
         }
 
+        function startPos() {
+            playerXpos = canvas.width / 2 - (playerSize / 2);
+            playerYpos = canvas.height - playerSize * 1.2;
+
+        }
+        
+        function keyPressed(evt){
+            console.log(evt.keyCode);
+        }
+        
+        function keyReleased(evt){
+            
+        }
+
+        function playerMove(){
+            playerXpos += playerXspeed;
+            playerYpos += playerYspeed;
+        
+            if (playerXpos > canvas.width - playerSize) { // right bounce
+                playerXspeed = playerXspeed * -1;
+            }
+            if (playerXpos < 0) { // left bounce
+                playerXspeed *= -1;
+            }
+
+            if (playerYpos > canvas.height - playerSize) { // bottom bounce
+                playerYspeed = -1;
+            }
+            if (playerYpos < 0) { // top bounce
+                playerYspeed *= -1;
+            }
+        }
 
     </script>
 </body>
