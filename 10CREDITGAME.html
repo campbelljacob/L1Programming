@@ -18,7 +18,34 @@
 
             setInterval(mainLoop, 1000 / 60); //main loop
         } // end of function
-
+        
+        var userName = '';
+        
+        var difficulty = prompt('how hard do you want it?','hard or easy');
+        var pass = false;
+        
+        if(difficulty != 'easy' || difficulty != 'hard'){
+            while(pass == false){
+                difficulty = prompt('how hard do you want it?','hard or easy');
+                // function toLowerCasee
+                // if passes set var pass to true 
+            }
+        }
+        
+        if(difficulty == 'easy'){
+            playerXspeed = 2;
+        } else {
+            playerXspeed = 200;
+        }
+        
+        if(difficulty == 'hard'){
+            playerXspeed = 6;
+        } else {
+            playerXspeed = 600;
+        }
+        
+        
+        
         var playerXpos = 0;
         var playerYpos = 0;
         var playerXspeed = 8;
@@ -32,7 +59,7 @@
         var leftKeyPressed = false;
         var rightKeyPressed = false;
         
-        var brickCount = 10;
+        var brickCount = 5;
         var bricks = [];
 
         function mainLoop() { //mainloop
@@ -109,7 +136,7 @@
 //            }
         } // end of function
         
-         function bricksDraw(){
+          function bricksDraw(){
             bricks.forEach(function(brick,index,array){
                 colorRect(brick.brickXpos,brick.brickYpos,brick.brickSize,brick.brickSize,'white');
             });
@@ -118,7 +145,7 @@
         function bricksMove(){
              bricks.forEach(function(brick,index,array){
 //               playerXpos += playerXspeed;
-                 brick.brickXpos += brick.brickXSpeed;  
+//                
                  brick.brickYpos += brick.brickYSpeed;  
                  
                  if(brick.brickXpos > canvas.width - brick.brickSize){ // right edge bounce
@@ -135,6 +162,10 @@
                     score++; 
 //                    console.log(score);
                 } 
+                 
+                if(brick.brickYpos + brick.brickSize > playerYpos && brick.brickYpos < playerYpos + PLAYER_SIZE && brick.brickXpos + brick.brickSize > playerXpos && brick.brickXpos < playerXpos + PLAYER_SIZE){
+                   playerXpos = 0;
+                }
                 
             });
         }
@@ -143,14 +174,12 @@
             var brickSize = Math.floor(Math.random() * (50 - 20) + 20);
             var brickXpos = Math.floor(Math.random() * (canvas.width - brickSize) );
             var brickYpos = Math.floor(Math.random() * (canvas.height - brickSize) );
-            var brickXSpeed = Math.floor(Math.random() * (15 - 2) + 2);
             var brickYSpeed = Math.floor(Math.random() * (15 - 2) + 2);
             
             var newBrickObject = {
                 brickSize: brickSize,
                 brickXpos: brickXpos,
                 brickYpos: brickYpos,
-                brickXSpeed: brickXSpeed,
                 brickYSpeed: brickYSpeed
             }
             
