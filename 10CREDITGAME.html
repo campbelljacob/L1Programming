@@ -18,6 +18,12 @@
 
             setInterval(mainLoop, 1000 / 60); //main loop
         } // end of function
+        
+        
+           var username = '';
+        while (username == '' || username == null) {
+            username = prompt('What is your name?') || ''; //Variable that asks for name
+        }
 
       var difficulty = '';
         var pass = false;
@@ -30,14 +36,16 @@
             }
         }
         
+        var brickCount = 5;
 
-        if (difficulty == 'easy') {
-            brickCount = 10;
+        if (difficulty.toLowerCase() == 'easy') {
+            brickCount = 2;
         } 
 
-        if (difficulty == 'hard') {
-           brickCount = 60;
+        if (difficulty.toLowerCase() == 'hard') {
+           brickCount = 10;
         } 
+    
         
         var playerXpos = 0;
         var playerYpos = 0;
@@ -53,14 +61,17 @@
         var rightKeyPressed = false;
         
         var score = 0;
+        var death = 0;
+        var gameRun = true;
 
-        var brickCount = 5;
         var bricks = [];
         
         var player = new Image();
         player.src = "images/player.png";
 
         function mainLoop() { //mainloop
+            if(gameRun){
+               
             colorRect(0, 0, canvas.width, canvas.height, 'black'); //bg
            // colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'red'); // player square
             drawImg(player,playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE); // player img
@@ -68,11 +79,25 @@
                 startPos();
                 startingPos = false;
             }
+            
+            if(death >= 5){
+                gameRun = false;
+            }
 
+            colorText('score: ' + score, 5, 20 ,'20px Arial', 'white');
+            colorText('death: ' + death,canvas.width - 90, 20 ,'20px Arial', 'red');
+            
             playerMove();
             bricksDraw();
             bricksMove();
-        } // end of func
+            }// end of if game run
+        
+            else {
+                colorRect(0, 0, canvas.width, canvas.height, 'black'); //bg
+                colorText(username + ' thats unlucky uce ' +  ' your score was ' + score,5,canvas.height / 2,'25px Arial','white') 
+            }
+        } 
+        
 
         function colorRect(x, y, w, h, c) {
             canvasContext.fillStyle = c;
@@ -92,8 +117,6 @@
 
         function keyPressed(evt) {
             //   console.log(evt.keyCode)
-
-            console.log(evt.keyCode);
             if (evt.keyCode == LEFT_KEY) {
                 leftKeyPressed = true;
             }
@@ -168,19 +191,19 @@
                     brick.brickXSpeed = Math.floor(Math.random() * (15 - 3) + 3); // new xSpeed
                     brick.brickYSpeed = Math.floor(Math.random() * (15 - 3) + 3); // new ySpeed
                     brick.brickXpos = Math.floor(Math.random() * (canvas.width - brick.brickSize));
-                    // score++;
+                     score++;
                     //                    console.log(score);
                 }
 
                 if (brick.brickYpos + brick.brickSize > playerYpos && brick.brickYpos < playerYpos + PLAYER_SIZE && brick.brickXpos + brick.brickSize > playerXpos && brick.brickXpos < playerXpos + PLAYER_SIZE) {
                     playerXpos = 0;
+                    death++;
                 }
 
             });
         }
         
         // end of func
-
         function randBrick() {
             var brickSize = Math.floor(Math.random() * (50 - 20) + 20);
             var brickXpos = Math.floor(Math.random() * (canvas.width - brickSize));
@@ -197,11 +220,19 @@
             return newBrickObject;
         }
         
+        
+        
         // end of func
 
         function colorRect(x, y, w, h, c) {
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
+        }
+        
+        function colorText(msg,x, y,f, c) {
+            canvasContext.fillStyle = c;
+            canvasContext.font = f;
+            canvasContext.fillText(msg,x,y)
         }
         
         // end of func
